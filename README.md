@@ -54,10 +54,7 @@ Optionally, you can also have these folders:
     +-- api
     |   +-- api.py              #expose APIs for production
     +-- logs
-    |   +-- sample-log.txt      #sample logs
-
-## Sample Usage
-
+    |   +-- sample-log
 
  ## Case Study: MNIST
 
@@ -65,3 +62,4 @@ Optionally, you can also have these folders:
 
  We download the data, `mnist_test.csv` and `mnist_train.csv` and put in inside `data/raw` directory.
 
+    pip install pyyaml
