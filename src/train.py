@@ -7,8 +7,8 @@ saved_dir = Path("../saved")
 # for training and finding the best model based on validation loss
 def train_eval(n_epochs, train_loader, valid_loader, model, criterion, optimizer, device, config_filename):
     
-    print("="*15, "Start Training and Validation", "="*15)
-
+    print("="*15, "Training", "="*15)
+    
     best_valid_loss = float('inf')
 
     train_losses, train_accs = [], []
@@ -30,17 +30,20 @@ def train_eval(n_epochs, train_loader, valid_loader, model, criterion, optimizer
             best_valid_loss = valid_loss
             torch.save(model.state_dict(), f'{saved_dir}/{config_filename}.pt')
 
-        print(f'Epoch: {epoch+1:02} | Train Loss: {train_loss:.3f} | Train Acc: {train_acc*100:.2f}%')
-        print(f'\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc*100:.2f}%')
+        print(f'Epoch: {epoch+1:02}')
+        print(f'Train Loss: {train_loss:.3f}  |  Train Acc: {train_acc*100:.2f}%')
+        print(f'Valid Loss: {valid_loss:.3f}  |  Valid Acc: {valid_acc*100:.2f}%')
+        
+    return train_losses, train_accs, valid_losses, valid_accs
 
 # for testing
 def test(model, test_loader, criterion, device, config_filename):
         
-    print("="*15, "Start Testing", "="*15)
+    print("="*15, "Testing ", "="*15)
 
     model.load_state_dict(torch.load(f'{saved_dir}/{config_filename}.pt'))
     test_loss, test_acc = _eval(model, test_loader, criterion, device)
-    print(f'Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}%')
+    print(f'Test  Loss: {test_loss:.3f}  |  Test  Acc: {test_acc*100:.2f}%')
 
 # =====internal use============
 # for training
