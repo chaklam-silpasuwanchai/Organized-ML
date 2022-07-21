@@ -1,11 +1,12 @@
 import torch
+import utils
 from pathlib        import Path
+
 
 saved_dir = Path("../saved")
 
 # for training and finding the best model based on validation loss
-def train_eval(bool_reshape, n_epochs, train_loader, valid_loader, model, 
-               criterion, optimizer, device, config_filename):
+def train_eval(setup):
     
     print("="*15, "Training", "="*15)
     
@@ -14,21 +15,33 @@ def train_eval(bool_reshape, n_epochs, train_loader, valid_loader, model,
     train_losses, train_accs = [], []
     valid_losses, valid_accs = [], []
 
-    for epoch in range(n_epochs):
+    for epoch in range(setup.n_epochs):
         
-        train_loss, train_acc = _train(bool_reshape, model, train_loader, optimizer, criterion, device)
-        valid_loss, valid_acc = _eval(bool_reshape, model, valid_loader, criterion, device)
+        train_loss, train_acc = _train(setup.bool_reshape, 
+                                       setup.model, 
+                                       setup.train_loader, 
+                                       setup.optimizer, 
+                                       setup.criterion, 
+                                       setup.device)
+        valid_loss, valid_acc = _eval(setup.bool_reshape, 
+                                      setup.model, 
+                                      setup.val_loader, 
+                                      setup.criterion, 
+                                      setup.device)
 
         # for plotting
         train_losses.append(train_loss)
         train_accs.append(train_acc)
         valid_losses.append(valid_loss)
         valid_accs.append(valid_acc)
+        
+        # for saving
+        filename = utils.get_filename(setup.config_file, setup.dataset_config_file, setup.seed)
 
         # save model with best validation loss
         if valid_loss < best_valid_loss:
             best_valid_loss = valid_loss
-            torch.save(model.state_dict(), f'{saved_dir}/{config_filename}.pt')
+            torch.save(setup.model.state_dict(), f'{saved_dir}/{filename}.pt')
 
         print(f'Epoch: {epoch+1:02}')
         print(f'Train Loss: {train_loss:.3f}  |  Train Acc: {train_acc*100:.2f}%')
@@ -37,12 +50,14 @@ def train_eval(bool_reshape, n_epochs, train_loader, valid_loader, model,
     return train_losses, train_accs, valid_losses, valid_accs
 
 # for testing
-def test(bool_reshape, model, test_loader, criterion, device, config_filename):
+def test(setup):
         
     print("="*15, "Testing ", "="*15)
-
-    model.load_state_dict(torch.load(f'{saved_dir}/{config_filename}.pt'))
-    test_loss, test_acc = _eval(bool_reshape, model, test_loader, criterion, device)
+    # for loading
+    filename = utils.get_filename(setup.config_file, setup.dataset_config_file, setup.seed)
+    
+    setup.model.load_state_dict(torch.load(f'{saved_dir}/{filename}.pt'))
+    test_loss, test_acc = _eval(setup.bool_reshape, setup.model, setup.test_loader, setup.criterion, setup.device)
     print(f'Test  Loss: {test_loss:.3f}  |  Test  Acc: {test_acc*100:.2f}%')
 
 # =====internal use============

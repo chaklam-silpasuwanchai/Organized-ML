@@ -1,7 +1,7 @@
 import torch, torchvision
 from torchvision import transforms, datasets
 
-def load(batch_size_train, batch_size_test):
+def normalized(batch_size_train, batch_size_test):
     
     # define the preprocessing
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
