@@ -31,8 +31,6 @@ def load_model(config, device):
     kwargs = list(config.items())[0][1] #e.g., input_size
     model_class = globals()[class_name] #get class from string
     
-    print_nicely("model", class_name)
-
     model = model_class(**kwargs).to(device)       #make class instance
     
     return model

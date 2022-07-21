@@ -3,9 +3,9 @@ from pathlib        import Path
 
 saved_dir = Path("../saved")
 
-
 # for training and finding the best model based on validation loss
-def train_eval(n_epochs, train_loader, valid_loader, model, criterion, optimizer, device, config_filename):
+def train_eval(bool_reshape, n_epochs, train_loader, valid_loader, model, 
+               criterion, optimizer, device, config_filename):
     
     print("="*15, "Training", "="*15)
     
@@ -16,8 +16,8 @@ def train_eval(n_epochs, train_loader, valid_loader, model, criterion, optimizer
 
     for epoch in range(n_epochs):
         
-        train_loss, train_acc = _train(model, train_loader, optimizer, criterion, device)
-        valid_loss, valid_acc = _eval(model, valid_loader, criterion, device)
+        train_loss, train_acc = _train(bool_reshape, model, train_loader, optimizer, criterion, device)
+        valid_loss, valid_acc = _eval(bool_reshape, model, valid_loader, criterion, device)
 
         # for plotting
         train_losses.append(train_loss)
@@ -37,17 +37,17 @@ def train_eval(n_epochs, train_loader, valid_loader, model, criterion, optimizer
     return train_losses, train_accs, valid_losses, valid_accs
 
 # for testing
-def test(model, test_loader, criterion, device, config_filename):
+def test(bool_reshape, model, test_loader, criterion, device, config_filename):
         
     print("="*15, "Testing ", "="*15)
 
     model.load_state_dict(torch.load(f'{saved_dir}/{config_filename}.pt'))
-    test_loss, test_acc = _eval(model, test_loader, criterion, device)
+    test_loss, test_acc = _eval(bool_reshape, model, test_loader, criterion, device)
     print(f'Test  Loss: {test_loss:.3f}  |  Test  Acc: {test_acc*100:.2f}%')
 
 # =====internal use============
 # for training
-def _train(model, loader, optimizer, criterion, device):
+def _train(bool_reshape, model, loader, optimizer, criterion, device):
     
     epoch_loss, epoch_acc = 0, 0
     model.train()  # useful for batchnorm and dropout
@@ -56,7 +56,11 @@ def _train(model, loader, optimizer, criterion, device):
 
         # GPU
         # images shape is [100, 1, 28, 28] [batch_size, channel, height, width]
-        X = X.to(device)
+        if(bool_reshape):
+            X = X.reshape(X.shape[0], -1).to(device)
+        else:
+            X = X.to(device)
+            
         Y = Y.to(device)  # label shape is  [100, ]
 
         # Forward pass
@@ -77,7 +81,7 @@ def _train(model, loader, optimizer, criterion, device):
     return epoch_loss / len(loader), epoch_acc / len(loader)
 
 # for evaluation
-def _eval(model, loader, criterion, device):
+def _eval(bool_reshape, model, loader, criterion, device):
 
     epoch_loss, epoch_acc = 0, 0
     model.eval()
@@ -87,7 +91,11 @@ def _eval(model, loader, criterion, device):
 
             # GPU
             # images shape is [100, 1, 28, 28] [batch_size, channel, height, width]
-            X = X.to(device)
+            if(bool_reshape):
+                X = X.reshape(X.shape[0], -1).to(device)
+            else:
+                X = X.to(device)
+            
             Y = Y.to(device)  # label shape is  [100, ]
 
             # Forward pass

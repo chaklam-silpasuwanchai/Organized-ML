@@ -15,7 +15,7 @@ def _run_experiment(config_file, seed):
     config_dir = Path("../configs")
     
     #1. load config
-    config = utils.load_yaml(config_dir, config_file)  #config of that architecture
+    config        = utils.load_yaml(config_dir, config_file)  #config of that architecture
     shared_config = utils.load_yaml(config_dir, "shared_config.yaml")  #shared config
     
     #2. set seeds and device
@@ -33,11 +33,11 @@ def _run_experiment(config_file, seed):
     criterion = nn.CrossEntropyLoss()
     
     #6. train model
-    train_losses, train_accs, valid_losses, valid_accs =  train_eval(shared_config.n_epochs, train_loader, val_loader, 
+    train_losses, train_accs, valid_losses, valid_accs =  train_eval(config.bool_reshape, shared_config.n_epochs, train_loader, val_loader, 
                                                                     model, criterion, optimizer, device, config_file)
     
     #7. eval model
-    test(model, test_loader, criterion, device, config_file)
+    test(config.bool_reshape, model, test_loader, criterion, device, config_file)
         
     #8. visualize results
     utils.plot(train_losses, valid_losses, config_file, "loss", seed)
