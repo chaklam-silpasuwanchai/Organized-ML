@@ -1,0 +1,36 @@
+2022-07-21 21:13:27,322 INFO ===Start Experiment===
+2022-07-21 21:13:27,322 INFO time           21:Jul:2022-21:13:27
+2022-07-21 21:13:27,323 INFO config         models/cnn1.yaml
+2022-07-21 21:13:27,324 INFO config         datasets/normalized.yaml
+2022-07-21 21:13:27,326 INFO config         shared_config.yaml
+2022-07-21 21:13:27,328 INFO seed           42             
+2022-07-21 21:13:27,328 INFO device         cpu            
+2022-07-21 21:13:27,328 INFO dataset        normalized     
+2022-07-21 21:13:27,420 INFO model          ConvNet        
+2022-07-21 21:13:27,422 INFO ===Training===
+2022-07-21 21:13:57,723 INFO Epoch: 01
+2022-07-21 21:13:57,724 INFO Train Loss: 0.279  |  Train Acc: 92.04%
+2022-07-21 21:13:57,724 INFO Valid Loss: 0.111  |  Valid Acc: 96.89%
+2022-07-21 21:14:40,878 INFO Epoch: 02
+2022-07-21 21:14:40,878 INFO Train Loss: 0.119  |  Train Acc: 96.42%
+2022-07-21 21:14:40,878 INFO Valid Loss: 0.081  |  Valid Acc: 97.73%
+2022-07-21 21:14:40,878 INFO ===Testing===
+2022-07-21 21:14:44,490 INFO Test  Loss: 0.066  |  Test  Acc: 98.05%
+2022-07-21 21:16:43,024 INFO ===Start Experiment===
+2022-07-21 21:16:43,025 INFO time           21:Jul:2022-21:16:43
+2022-07-21 21:16:43,027 INFO config         models/cnn1.yaml
+2022-07-21 21:16:43,028 INFO config         datasets/normalized.yaml
+2022-07-21 21:16:43,029 INFO config         shared_config.yaml
+2022-07-21 21:16:43,029 INFO seed           42             
+2022-07-21 21:16:43,030 INFO device         cpu            
+2022-07-21 21:16:43,030 INFO dataset        normalized     
+2022-07-21 21:16:43,124 INFO model          ConvNet        
+2022-07-21 21:16:43,127 INFO ===Training===
+2022-07-21 21:17:11,911 INFO Epoch: 01
+2022-07-21 21:17:11,911 INFO Train Loss: 0.279  |  Train Acc: 92.04%
+2022-07-21 21:17:11,911 INFO Valid Loss: 0.111  |  Valid Acc: 96.89%
+2022-07-21 21:17:47,873 INFO Epoch: 02
+2022-07-21 21:17:47,874 INFO Train Loss: 0.119  |  Train Acc: 96.42%
+2022-07-21 21:17:47,874 INFO Valid Loss: 0.081  |  Valid Acc: 97.73%
+2022-07-21 21:17:47,874 INFO ===Testing===
+2022-07-21 21:17:51,372 INFO Test  Loss: 0.066  |  Test  Acc: 98.05%
