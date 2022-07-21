@@ -7,8 +7,8 @@ def normalized(batch_size_train, batch_size_test):
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     
     # get the train and test dataset
-    train_dataset = datasets.MNIST(root = './data/processed', train=True,  transform = transform, download=True)
-    test_dataset  = datasets.MNIST(root = './data/processed', train=False, transform = transform, download=True)
+    train_dataset = datasets.MNIST(root = '../data/processed', train=True,  transform = transform, download=True)
+    test_dataset  = datasets.MNIST(root = '../data/processed', train=False, transform = transform, download=True)
 
     # define the train and val set
     lengths = [int(len(train_dataset) * 0.8), int(len(train_dataset) * 0.2)]

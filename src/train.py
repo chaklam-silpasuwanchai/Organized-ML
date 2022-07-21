@@ -1,14 +1,15 @@
 import torch
 import utils
+import logging
 from pathlib        import Path
 
-
 saved_dir = Path("../saved")
+logger = logging.getLogger("logger")
 
 # for training and finding the best model based on validation loss
 def train_eval(setup):
     
-    print("="*15, "Training", "="*15)
+    logger.info("===Training===")
     
     best_valid_loss = float('inf')
 
@@ -43,22 +44,22 @@ def train_eval(setup):
             best_valid_loss = valid_loss
             torch.save(setup.model.state_dict(), f'{saved_dir}/{filename}.pt')
 
-        print(f'Epoch: {epoch+1:02}')
-        print(f'Train Loss: {train_loss:.3f}  |  Train Acc: {train_acc*100:.2f}%')
-        print(f'Valid Loss: {valid_loss:.3f}  |  Valid Acc: {valid_acc*100:.2f}%')
+        logger.info(f'Epoch: {epoch+1:02}')
+        logger.info(f'Train Loss: {train_loss:.3f}  |  Train Acc: {train_acc*100:.2f}%')
+        logger.info(f'Valid Loss: {valid_loss:.3f}  |  Valid Acc: {valid_acc*100:.2f}%')
         
     return train_losses, train_accs, valid_losses, valid_accs
 
 # for testing
 def test(setup):
         
-    print("="*15, "Testing ", "="*15)
+    logger.info("===Testing===")
     # for loading
     filename = utils.get_filename(setup.config_file, setup.dataset_config_file, setup.seed)
     
     setup.model.load_state_dict(torch.load(f'{saved_dir}/{filename}.pt'))
     test_loss, test_acc = _eval(setup.bool_reshape, setup.model, setup.test_loader, setup.criterion, setup.device)
-    print(f'Test  Loss: {test_loss:.3f}  |  Test  Acc: {test_acc*100:.2f}%')
+    logger.info(f'Test  Loss: {test_loss:.3f}  |  Test  Acc: {test_acc*100:.2f}%')
 
 # =====internal use============
 # for training

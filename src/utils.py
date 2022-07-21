@@ -1,4 +1,5 @@
 import logging
+import re
 import yaml #pip install pyyaml
 import torch
 import numpy as np
@@ -9,18 +10,22 @@ from attrdict   import AttrDict #pip install attrdict
 from models.fc  import *
 from datasets   import *
 from models.cnn import *
+from pathlib    import Path
 
-def get_logger(setup):
-    
-    Log_Format = "%(levelname)s %(asctime)s - %(message)s"
-    filename = "../logs/" + get_filename(setup.config_file, setup.dataset_config_file)
+import logging
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
-    logging.basicConfig(filename = filename,
-                        filemode = "a",
-                        format = Log_Format,
-                        level = logging.INFO)
-    logger = logging.getLogger()
-    
+def setup_logger(name, filename, level=logging.INFO):
+    """To setup as many loggers as you want"""
+
+    handler = logging.FileHandler(filename.with_suffix(".log"), "a")        
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler) #save to log
+    logger.addHandler(logging.StreamHandler()) #but also print to console
+
     return logger
 
 def set_device():
@@ -46,7 +51,7 @@ def load_yaml(config_dir, filename):
     return config
 
 def get_filename(config_file, datasets_config_file, seed):
-    return config_file.split("/")[-1] + "_" + datasets_config_file.split("/")[-1] + "_" + str(seed)
+    return str(Path(config_file).stem) + "_" + str(Path(datasets_config_file).stem) + "_" + str(seed)
 
 def load_model(config, device):
     class_name = list(config.keys())[0] #e.g., FC
@@ -60,7 +65,7 @@ def load_model(config, device):
     return model
 
 def print_nicely(text, var):
-    logger = get_logger()
+    logger = logging.getLogger("logger")
     logger.info(f"{text:<15}{var:<15}")
     #< means align to left, and 15 is the width
 

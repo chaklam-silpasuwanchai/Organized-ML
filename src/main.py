@@ -8,12 +8,17 @@ from torch          import nn
 from pathlib        import Path
 from setup          import Setup
 
+config_dir = Path("../configs")
+log_dir    = Path("../logs")
+
 def _run_experiment(config_file, dataset_config_file, seed):
     
-    print("="*14, "Experiment", "="*14)
-    utils.print_nicely("time", datetime.now().strftime("%d:%b:%Y-%H:%M:%S"))
+    #0. set logger
+    filename = utils.get_filename(config_file, dataset_config_file, seed)    
+    logger = utils.setup_logger("logger", log_dir / filename)
     
-    config_dir = Path("../configs")
+    logger.info("===Start Experiment===")
+    utils.print_nicely("time", datetime.now().strftime("%d:%b:%Y-%H:%M:%S"))
     
     #1. load config
     config         = utils.load_yaml(config_dir, config_file)  #config of that architecture
